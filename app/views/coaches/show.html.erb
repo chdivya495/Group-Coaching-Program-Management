@@ -1,0 +1,86 @@
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #a8d8ea;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #4a90e2;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #333;
+    border-bottom: 2px solid #4a90e2;
+    padding-bottom: 10px;
+    margin-top: 30px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  li {
+    background: #e6f7ff;
+    border: 1px solid #4a90e2;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    transition: background 0.3s;
+  }
+
+  li:hover {
+    background: #4a90e2;
+    color: white;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #a8d8ea;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="container">
+  <h1><%= @selected_coach.name %></h1>
+  <p>Email: <%= @selected_coach.email %></p>
+  <p>Number of Students: <%= @student_count %></p>
+
+  <h2>Coaching Programs</h2>
+  <ul>
+    <% @coaching_programs.each do |program| %>
+      <li><%= program.name %></li>
+    <% end %>
+  </ul>
+
+  <h2>Enrolled Employees</h2>
+  <ul>
+    <% @employees.each do |employee| %>
+      <li><%= "#{employee.first_name} #{employee.last_name}" %></li>
+    <% end %>
+  </ul>
+
+  <h2>Responsible Companies</h2>
+  <ul>
+    <% @companies.each do |company| %>
+      <li><%= company.name %></li>
+    <% end %>
+  </ul>
+</div>

@@ -1,0 +1,8 @@
+en:
+  admin:
+    actions:
+      registered_employees:
+        title: "Registered Employees"
+        breadcrumb: "Registered Employees"
+        menu: "Registered Employees"
+        button: "View Registered Employees"

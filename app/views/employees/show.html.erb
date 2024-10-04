@@ -1,0 +1,104 @@
+<h1 class="employee-header">Employee Details</h1>
+
+<div class="button-container-top-right">
+  <%= link_to 'Go to Coach Dashboard', dashboard_coaches_path, class: 'btn-back-top-right' %>
+</div>
+
+<div class="button-container-top-right details-button">
+  <%= link_to 'Go to Coaches Details', coaches_path, class: 'btn-details' %>
+</div>
+
+<div class="employee-details animated-details">
+  <div class="detail-item">
+    <p><strong>First Name:</strong> <%= @employee.first_name %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Last Name:</strong> <%= @employee.last_name %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Email:</strong> <%= @employee.email %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Phone Number:</strong> <%= @employee.phone %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Department:</strong> <%= @employee.department.presence || "N/A" %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Coaching Program:</strong> <%= @employee.coaching_program.name if @employee.coaching_program.present? %></p>
+  </div>
+  <div class="detail-item">
+    <p><strong>Coach:</strong> <%= @employee.coach.name if @employee.coach.present? %></p>
+  </div>
+</div>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(#a8d8ea, #f0f4f8);
+    color: #333;
+  }
+
+  .employee-header {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .button-container-top-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .details-button {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+  }
+
+  .btn-back-top-right, .btn-details {
+    padding: 10px 20px;
+    background-color: #ff4757;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-back-top-right:hover, .btn-details:hover {
+    background-color: #ff6b81;
+  }
+
+  .employee-details {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: linear-gradient(#a8d8ea, #f0f4f8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+  }
+
+  .detail-item {
+    margin-bottom: 15px;
+    color: #000;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
