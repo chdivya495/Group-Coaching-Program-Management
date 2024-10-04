@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YourApp</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <style>
+    .admin-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ff4757;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.2s;
+      cursor: pointer;
+      margin: 10px 10px;
+    }
+
+    .admin-button:hover {
+      background-color: ##ff4757;
+      transform: translateY(-2px);
+    }
+
+    body {
+      margin: 20px;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <%= link_to 'Admin Panel', rails_admin_path, class: 'admin-button' %>
+    
+  <%= yield %>
+</body>
+</html>

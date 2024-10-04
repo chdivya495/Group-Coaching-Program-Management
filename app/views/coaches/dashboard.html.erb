@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #a8d8ea, #f0f4f8);
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #coach-details {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        #coach-details.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .list-group-item {
+            transition: background-color 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            transition: background-color 0.3s ease;
+        }
+
+        .table th {
+            background-color: #5A8DEE;
+            color: white;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .alert {
+            display: none;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 5px #5A8DEE, 0 0 10px #5A8DEE;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-control {
+            padding: 1rem;
+            font-size: 1.2rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:hover {
+            border: 1px solid #5A8DEE;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .custom-select {
+            padding: 1.25rem;
+            font-size: 1.25rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            color: #333;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            border: 2px solid #5A8DEE;
+        }
+
+        .custom-select:focus {
+            border-color: #4a7ec1;
+            box-shadow: 0 0 5px rgba(90, 141, 238, 0.5);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-custom {
+            background-color: #5A8DEE;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #4a7ec1;
+            transform: scale(1.05);
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Coach Dashboard</h1>
+
+        <%= form_with(url: dashboard_coaches_path, method: :get, local: true) do |f| %>
+            <div class="form-group">
+                <%= f.label :coach_id, "Select a Coach", class: "font-weight-bold" %>
+                <%= f.collection_select :coach_id, @coaches, :id, :name, 
+                    prompt: 'Select a Coach', 
+                    class: 'form-control custom-select', 
+                    onchange: 'this.form.submit();' 
+                %>
+            </div>
+        <% end %>
+
+        <div id="coach-details" class="mt-4">
+            <% if @selected_coach %>
+                <h2><i class="fas fa-chalkboard-teacher icon"></i>Details for <%= @selected_coach.name %></h2>
+                
+                <h3><i class="fas fa-tasks icon"></i>Coaching Programs:</h3>
+                <ul class="list-group">
+                    <% @coaching_programs.each do |program| %>
+                        <li class="list-group-item"><%= program.name %></li>
+                    <% end %>
+                </ul>
+
+                <p><strong>Number of Students Enrolled:</strong> <%= @student_count %></p>
+
+                <h3><i class="fas fa-users icon"></i>Enrolled Employees:</h3>
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @employees.each do |employee| %>
+                            <tr>
+                                <td><%= employee.first_name %></td>
+                                <td><%= employee.last_name %></td>
+                                <td><%= employee.email %></td>
+                                <td><%= employee.phone %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+
+                <h3><i class="fas fa-building icon"></i>Coaching For:</h3>
+                <ul class="list-group">
+                    <% @companies.each do |company| %>
+                        <li class="list-group-item"><%= company.name %></li>
+                    <% end %>
+                </ul>
+
+                <button class="btn btn-custom mt-3" id="refresh-coach-details">Refresh</button>
+            <% else %>
+                <p>Please select a coach to see the details.</p>
+            <% end %>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const detailsDiv = document.getElementById('coach-details');
+            const refreshButton = document.getElementById('refresh-coach-details');
+
+            function fetchCoachDetails(coachId) {
+                fetch(`/coaches/get_coach_details?coach_id=${coachId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        detailsDiv.innerHTML = '';
+
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+
+                        const detailsHtml = `
+                            <h2><i class="fas fa-chalkboard-teacher icon"></i>Details for ${data.coach.name}</h2>
+                            <h3><i class="fas fa-tasks icon"></i>Coaching Programs:</h3>
+                            <ul class="list-group">${data.coaching_programs.map(program => `<li class="list-group-item">${program.name}</li>`).join('')}</ul>
+                            <p><strong>Number of Students Enrolled:</strong> ${data.employees.length}</p>
+                            <h3><i class="fas fa-users icon"></i>Enrolled Employees:</h3>
+                            <table class="table table-striped">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.employees.map(employee => `
+                                        <tr>
+                                            <td>${employee.first_name}</td>
+                                            <td>${employee.last_name}</td>
+                                            <td>${employee.email}</td>
+                                            <td>${employee.phone}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                            <h3><i class="fas fa-building icon"></i>Coaching Responsibilities:</h3>
+                            <ul class="list-group">
+                                ${data.companies.map(company => `<li class="list-group-item">${company.name}</li>`).join('')}
+                            </ul>
+                        `;
+                        detailsDiv.innerHTML = detailsHtml;
+
+                        detailsDiv.classList.add('show');
+                    })
+                    .catch(error => {
+                        alert("Error fetching coach details: " + error);
+                    });
+            }
+
+            form.addEventListener('change', function () {
+                const coachId = this.coach_id.value;
+                fetchCoachDetails(coachId);
+            });
+
+            refreshButton.addEventListener('click', function () {
+                const coachId = form.coach_id.value;
+                if (coachId) {
+                    fetchCoachDetails(coachId);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
