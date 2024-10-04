@@ -1,0 +1,179 @@
+<%= form_with(model: @employee, url: company_employees_path(@company), local: true, html: { class: 'animated-form' }) do |f| %>
+  <div class="step-1 animated-step">
+    <h1>Step 1: Select Coaching Program</h1>
+    
+    <div class="form-group">
+      <%= f.label :coaching_program_id, "Select a Coaching Program" %>
+      <%= f.collection_select :coaching_program_id, @coaching_programs, :id, :name, prompt: '--Select a Program--' %>
+    </div>
+
+    <button type="button" class="next btn btn-animated">Next</button>
+  </div>
+
+  <div class="step-2 animated-step" style="display:none;">
+    <h1>Step 2: Employee Details</h1>
+    
+    <div class="form-group">
+      <%= f.label :first_name, "First Name" %>
+      <%= f.text_field :first_name, required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :last_name, "Last Name" %>
+      <%= f.text_field :last_name, required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :email, "Email" %>
+      <%= f.email_field :email, required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :phone, "Phone Number" %>
+      <%= f.telephone_field :phone %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :department, "Department" %>
+      <%= f.text_field :department %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :coach_id, "Select a Coach" %>
+      <%= f.collection_select :coach_id, [], :id, :name, prompt: '--Select a Coach--' %>
+    </div>
+
+    <%= f.submit "Submit", class: "btn btn-animated" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#employee_coaching_program_id').on('change', function() {
+      var coachingProgramId = $(this).val();
+      if (coachingProgramId) {
+        $.ajax({
+          url: '/coaching_programs/' + coachingProgramId + '/coaches',
+          method: 'GET',
+          success: function(data) {
+            var coachSelect = $('#employee_coach_id');
+            coachSelect.empty();
+            coachSelect.append('<option value="">--Select a Coach--</option>');
+            data.forEach(function(coach) {
+              coachSelect.append('<option value="' + coach.id + '">' + coach.name + '</option>');
+            });
+          }
+        });
+      } else {
+        $('#employee_coach_id').empty();
+      }
+    });
+
+    $('.next').on('click', function() {
+      if ($('#employee_coaching_program_id').val() == '') {
+        alert('Please select a coaching program');
+      } else {
+        $('.step-1').addClass('slide-out');
+        setTimeout(function() {
+          $('.step-1').hide();
+          $('.step-2').fadeIn().addClass('slide-in');
+        }, 500);
+      }
+    });
+  });
+</script>
+
+<style>
+.animated-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 20px;
+  background-color: #e8f4f8; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}
+
+body {
+  background-color: #e8f4f8; 
+  margin: 0; 
+  font-family: 'Poppins', sans-serif; 
+}
+
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 16px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease-in-out;
+}
+
+.btn-animated {
+  padding: 12px 25px;
+  font-size: 16px;
+  background-color: #6c5ce7;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.btn-animated:hover {
+  transform: translateY(-3px);
+  background-color: #4e3fbf;
+  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.5);
+}
+
+.animated-step {
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+}
+
+.slide-out {
+  animation: slideOut 0.6s forwards;
+}
+
+.slide-in {
+  animation: slideIn 0.6s forwards;
+}
+
+@keyframes slideOut {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slideIn {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+input:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+}
+</style>

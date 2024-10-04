@@ -1,0 +1,153 @@
+<h1 class="text-center">Coaches Details</h1>
+
+<div class="search-bar text-center">
+  <%= form_with url: coaches_path, method: :get, local: true, class: 'form-inline' do |f| %>
+    <div class="form-group">
+      <%= f.label :coaching_program_name, 'Search by Coaching Program', class: 'font-weight-bold' %>
+      <%= f.text_field :coaching_program_name, value: params[:coaching_program_name], class: 'form-control mr-2', id: 'coaching_program_name' %>
+    </div>
+    
+    <div class="form-group">
+      <b>OR</b>
+      <%= f.label :company_name, ' Search by Company Name', class: 'font-weight-bold' %>
+      <%= f.text_field :company_name, value: params[:company_name], class: 'form-control mr-2', id: 'company_name' %>
+    </div>
+
+    <%= f.submit 'Search', class: 'btn btn-primary' %>
+    <button type="button" id="clear-search" class="btn btn-secondary ml-2">Clear Search</button>
+  <% end %>
+</div>
+
+<table class="table table-striped mt-4">
+  <thead class="thead-dark">
+    <tr>
+      <th>Serial No</th>
+      <th>Coach Name</th>
+      <th>Company</th>
+      <th>Coaching Program</th>
+      <th>Enrolled Employees</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @coaches.each_with_index do |coach, index| %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= link_to coach.name, coach_path(coach), class: 'link-coach' %></td>
+        <td>
+          <ul class="arrow-list">
+            <% coach.companies.each do |company| %>
+              <li><%= company.name %></li>
+            <% end %>
+          </ul>
+        </td>
+        <td>
+          <ul class="arrow-list">
+            <% coach.coaching_programs.each do |program| %>
+              <li><%= program.name %></li>
+            <% end %>
+          </ul>
+        </td>
+        <td>
+          <ul class="arrow-list">
+            <% coach.employees.each do |employee| %>
+              <li><%= "#{employee.first_name} #{employee.last_name}" %></li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const clearSearchButton = document.getElementById('clear-search');
+    const coachingProgramInput = document.getElementById('coaching_program_name');
+    const companyNameInput = document.getElementById('company_name');
+
+    clearSearchButton.addEventListener('click', function() {
+      coachingProgramInput.value = '';
+      companyNameInput.value = '';
+
+      const currentURL = new URL(window.location.href);
+      const params = new URLSearchParams(currentURL.search);
+      params.delete('coaching_program_name');
+      params.delete('company_name');
+
+      window.history.replaceState({}, '', `${currentURL.pathname}?${params}`);
+      window.location.href = currentURL.pathname;
+    });
+  });
+</script>
+
+<style>
+  body {
+    background-color: #a8d8ea;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s ease;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .table {
+    margin: 0 auto;
+    width: 80%;
+    border-collapse: collapse;
+  }
+
+  .table th, .table td {
+    border: 1px solid #333;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .table th {
+    background-color: darkgrey;
+    color: #333;
+  }
+
+  .link-coach {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .btn-back {
+    padding: 10px 20px;
+    background-color: #ff4757;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .btn-back:hover {
+    background-color: #ff6b81;
+  }
+
+  .form-inline {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-right: 10px;
+  }
+
+  .form-control {
+    display: inline-block;
+    width: auto;
+  }
+
+  .arrow-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .arrow-list li::before {
+    content: '→ ';
+    color: #ff4757;
+  }
+</style>
