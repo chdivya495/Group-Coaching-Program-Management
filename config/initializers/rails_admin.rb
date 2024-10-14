@@ -60,7 +60,8 @@ RailsAdmin.config do |config|
 
   config.model 'Coach' do
     list do
-      field :name
+      field :first_name
+      field :last_name
       field :email
     end
   end

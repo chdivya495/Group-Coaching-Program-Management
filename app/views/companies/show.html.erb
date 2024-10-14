@@ -33,17 +33,6 @@
     <p><strong>Website:</strong> <%= link_to @company.website, @company.website, target: "_blank", class: "company-link" %></p>
   </div>
 
-  <% if @company.logo.present? %>
-    <div class="detail-item animated-step">
-      <p><strong>Logo:</strong></p>
-      <%= image_tag @company.logo.url, alt: "Company Logo", class: "company-logo" %>
-    </div>
-  <% else %>
-    <div class="detail-item animated-step">
-      <p><strong>Logo:</strong> No logo available</p>
-    </div>
-  <% end %>
-</div>
 
 <%= link_to 'Back to Companies', companies_path, class: 'btn-back btn-animated' %>
 

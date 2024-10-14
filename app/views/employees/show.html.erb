@@ -28,7 +28,7 @@
     <p><strong>Coaching Program:</strong> <%= @employee.coaching_program.name if @employee.coaching_program.present? %></p>
   </div>
   <div class="detail-item">
-    <p><strong>Coach:</strong> <%= @employee.coach.name if @employee.coach.present? %></p>
+    <p><strong>Coach:</strong> <%= @employee.coach.first_name if @employee.coach.present? %></p>
   </div>
 </div>
 

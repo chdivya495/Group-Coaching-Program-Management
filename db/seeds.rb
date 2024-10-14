@@ -13,7 +13,7 @@ company1 = Company.create!(
   address: "123 Tech Street",
   country: "USA",
   website: "www.techsolutions.com",
-  logo: "logo1.png"
+  logo: "no logo available  "
 )
 
 company2 = Company.create!(
@@ -25,7 +25,7 @@ company2 = Company.create!(
   address: "456 Health Ave",
   country: "USA",
   website: "www.healthcorp.com",
-  logo: "logo2.png"
+  logo: "no logo available"
 )
 
 coach1 = Coach.create!(first_name: "John", last_name:"Doe", email: "johndoe@example.com")

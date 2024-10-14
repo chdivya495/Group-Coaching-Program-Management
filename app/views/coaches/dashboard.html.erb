@@ -116,7 +116,7 @@
         <%= form_with(url: dashboard_coaches_path, method: :get, local: true) do |f| %>
             <div class="form-group">
                 <%= f.label :coach_id, "Select a Coach", class: "font-weight-bold" %>
-                <%= f.collection_select :coach_id, @coaches, :id, :name, 
+                <%= f.collection_select :coach_id, @coaches, :id, :first_name, 
                     prompt: 'Select a Coach', 
                     class: 'form-control custom-select', 
                     onchange: 'this.form.submit();' 
@@ -126,7 +126,7 @@
 
         <div id="coach-details" class="mt-4">
             <% if @selected_coach %>
-                <h2><i class="fas fa-chalkboard-teacher icon"></i>Details for <%= @selected_coach.name %></h2>
+                <h2><i class="fas fa-chalkboard-teacher icon"></i>Details for <%= @selected_coach.first_name %></h2>
                 
                 <h3><i class="fas fa-tasks icon"></i>Coaching Programs:</h3>
                 <ul class="list-group">

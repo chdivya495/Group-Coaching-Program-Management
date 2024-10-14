@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_10_03_044610) do
   create_table "coaches", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "image"
+    t.string "phone"
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
