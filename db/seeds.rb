@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Coach.delete_all
 
 Company.delete_all
@@ -63,6 +64,43 @@ coach2 = Coach.create!(first_name: "Jane", last_name: "Smith", email: "janesmith
 
 
 c…  name: "Leadership Training",
+=======
+
+Coach.delete_all
+Company.delete_all
+CoachingProgram.delete_all
+Employee.delete_all
+
+company1 = Company.create!(
+  name: "Tech Solutions",
+  description: "A leading tech company",
+  zip: 12345,
+  city: "San Francisco",
+  state: "CA",
+  address: "123 Tech Street",
+  country: "USA",
+  website: "www.techsolutions.com",
+  logo: "logo1.png"
+)
+
+company2 = Company.create!(
+  name: "Health Corp",
+  description: "Healthcare company",
+  zip: 67890,
+  city: "New York",
+  state: "NY",
+  address: "456 Health Ave",
+  country: "USA",
+  website: "www.healthcorp.com",
+  logo: "logo2.png"
+)
+
+coach1 = Coach.create!(name: "John Doe", email: "johndoe@example.com")
+coach2 = Coach.create!(name: "Jane Smith", email: "janesmith@example.com")
+
+coaching_program1 = CoachingProgram.create!(
+  name: "Leadership Training",
+>>>>>>> 6335f91b307119b70f27d8004c2f7ce7cfc959df
   description: "Program for developing leadership skills",
   company: company1
 )
@@ -112,4 +150,8 @@ Employee.create!(
   coach: coach1
 )
 
+<<<<<<< HEAD
 puts "Seed data has been created successfully!"
+=======
+puts "Seed data has been created successfully!"
+>>>>>>> 6335f91b307119b70f27d8004c2f7ce7cfc959df
