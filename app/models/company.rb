@@ -6,5 +6,4 @@ class Company < ApplicationRecord
   validates :name, presence: true, uniqueness: true, length: { maximum: 255 }
   validates :zip, presence: true, numericality: { only_integer: true }, length: { is: 5 }
   validates :city, :state, :address, :country, presence: true
-  validates :website, format: { with: URI::regexp(%w[http https]) }, allow_blank: true
 end
